@@ -5,6 +5,7 @@ const {
 } = require("firebase-functions/v2/firestore");
 
 const fetch = require("node-fetch");
+const logger = require("firebase-functions/logger");
 
 /**
  * Posts a message to Discord with Discord's Webhook API
@@ -16,20 +17,20 @@ async function postMessageToDiscord(botName, messageBody) {
   const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
   if (!webhookUrl) {
     throw new Error(
-      "No webhook URL found. Set the Discord Webhook URL before deploying. Learn more about Discord webhooks here: https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks"
+        "No webhook URL found. Set the Discord Webhook URL before deploying. Learn more about Discord webhooks here: https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks",
     );
   }
 
   return fetch(webhookUrl, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {"Content-Type": "application/json"},
     body: JSON.stringify(
-      // Here's what the Discord API supports in the payload:
-      // https://discord.com/developers/docs/resources/webhook#execute-webhook-jsonform-params
-      {
-        content: messageBody,
-        username: botName,
-      }
+        // Here's what the Discord API supports in the payload:
+        // https://discord.com/developers/docs/resources/webhook#execute-webhook-jsonform-params
+        {
+          content: messageBody,
+          username: botName,
+        },
     ),
   });
 }
@@ -46,7 +47,6 @@ exports.createprofile = onDocumentCreated("profiles/{profileId}", async (event) 
 
   // access a particular field as you would any JS property
   const email = data.email;
-  console.log(name);
 
   const message = `
 📱 New user registered with  <${email}>
@@ -66,8 +66,6 @@ exports.createprofile = onDocumentCreated("profiles/{profileId}", async (event) 
         error,
     );
   }
-
-  // 
 
   // perform more operations ...
 });
