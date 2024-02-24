@@ -50,6 +50,7 @@ exports.createprofile = onDocumentCreated("profiles/{profileId}", async (event) 
 
   const message = `
 📱 New user registered with  <${email}>
+  [Dashboard](https://barked.retool.com/apps/b2f0d388-d20b-11ee-b7e6-7b2d23b0ac38/onboarding%20profiles)
 `;
   try {
     const response = await postMessageToDiscord("funnel", message);
