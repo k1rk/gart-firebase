@@ -63,7 +63,7 @@ exports.createprofile = onDocumentCreated("profiles/{profileId}", async (event) 
     }
   } catch (error) {
     logger.error(
-        `Unable to post user registration for ${email} to Discord`,
+        `Unable to post user registration alert for ${email} to Discord`,
         error,
     );
   }
