@@ -20,3 +20,5 @@
 
 const profilehandlers = require("./src/profile-handlers.js");
 exports.createprofile = profilehandlers.createprofile;
+
+exports.openai = require("./src/openai.js");
