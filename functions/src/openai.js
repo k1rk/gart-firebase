@@ -6,11 +6,11 @@ const {
 
 const logger = require("firebase-functions/logger");
 const OpenAI = require("openai");
-const {defineSecret, defineString} = require("firebase-functions/params");
+const {defineSecret} = require("firebase-functions/params");
 const admin = require("firebase-admin");
 
 const openaiApiKey = defineSecret("OPENAI_API_KEY");
-const assistantId = defineString("ASSISTANT_ID");
+// const assistantId = defineString("ASSISTANT_ID");
 
 admin.initializeApp();
 
