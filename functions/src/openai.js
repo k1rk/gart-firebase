@@ -43,6 +43,7 @@ exports.generateplan = onDocumentCreated(
         const messageThread = await openai.beta.threads.create({
           metadata: {
             user_id: event.profileId,
+            user_email: email,
           },
         });
         if (messageThread.id) {
@@ -64,7 +65,7 @@ exports.generateplan = onDocumentCreated(
 
         const stream = await openai.beta.threads.runs.create(
             messageThread.id,
-            {assistant_id: assistantId, stream: true},
+            {assistant_id: process.env.ASSISTANT_ID, stream: true},
         );
 
         for await (const event of stream) {
