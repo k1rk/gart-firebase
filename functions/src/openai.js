@@ -25,7 +25,7 @@ exports.generateplan = onDocumentCreated(
       // e.g. {'name': 'Marie', 'age': 66}
       const snapshot = event.data;
       if (!snapshot) {
-        console.log("No data associated with the event");
+        logger.info("No data associated with the event");
         return;
       }
       const data = snapshot.data();
@@ -36,6 +36,7 @@ exports.generateplan = onDocumentCreated(
       const openai = new OpenAI({
         apiKey: process.env.OPENAI_API_KEY,
       });
+      logger.info("created client");
 
       try {
         // const myAssistant = await openai.beta.assistants.retrieve(assistantId);
@@ -45,18 +46,18 @@ exports.generateplan = onDocumentCreated(
           },
         });
         if (messageThread.id) {
-          logger.info(
-              `created new thread ${messageThread.id} for user ${email}`,
-          );
+          logger.info(`created new thread ${messageThread.id} for user ${email}`);
         } else {
           throw new Error(messageThread);
         }
 
-        const message = await openai.beta.messages.create({
-          thread_id: messageThread.id,
-          role: "user",
-          content: "I want to create a plan to get fit",
-        });
+        const message = await openai.beta.threads.messages.create(
+            messageThread.id,
+            {
+              role: "user",
+              content: "I want to create a plan to get fit",
+            },
+        );
         if (!message.id) {
           throw new Error(message);
         }
@@ -67,11 +68,11 @@ exports.generateplan = onDocumentCreated(
         );
 
         for await (const event of stream) {
-          console.log(event);
+          logger.info(`received event ${event}`);
         }
         admin.firestore().collection("results_test").add(stream.data);
 
-        console.log(stream.data.required_action.submit_tool_outputs);
+        logger.debug(stream.data.required_action.submit_tool_outputs);
       } catch (error) {
         logger.error(
             `Unable to generate plan for user ${email}`,
